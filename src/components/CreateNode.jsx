@@ -4,17 +4,11 @@ import { useAppContext } from "../context/AppContext";
 
 const CreateNode = (Component) => {
   function Node({ id, data }) {
-    const { activeComponent, setActiveComponent } = useAppContext();
+    const { setActiveComponent } = useAppContext();
     const { setNodes } = useReactFlow();
     const reactFlowWrapper = useRef(null);
     const reactFlowInstance = useReactFlow();
     const updateNodeInternals = useUpdateNodeInternals();
-
-    //   const handleTypeChange = (value) => {
-    //     setNodeData(setNodes, id, "type", value);
-    //   };
-
-    console.log("activeComponent ", activeComponent);
 
     const onDragStart = useCallback((event) => {
       event.dataTransfer.effectAllowed = "move";
@@ -48,7 +42,7 @@ const CreateNode = (Component) => {
           })
         );
       },
-      [reactFlowInstance]
+      [reactFlowInstance, id, setNodes, updateNodeInternals]
     );
 
     return (

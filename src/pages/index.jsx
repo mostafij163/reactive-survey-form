@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
@@ -24,7 +24,7 @@ export const nodeTypes = {
 };
 
 let id = 1;
-const getId = () => `${id++}`;
+export const getId = () => `${id++}`;
 
 const DnDFlow = () => {
   const reactFlowWrapper = useRef(null);
@@ -37,7 +37,7 @@ const DnDFlow = () => {
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
-    []
+    [setEdges]
   );
 
   const onDragOver = useCallback((event) => {
@@ -87,13 +87,14 @@ const DnDFlow = () => {
 
       setNodes((nds) => nds.concat(newNode));
     },
-    [reactFlowInstance]
+    [reactFlowInstance, setNodes]
   );
 
   const onNodeContextMenu = useCallback(
     (event, node) => {
       // Prevent native context menu from showing
       event.preventDefault();
+      event.stopPropagation();
 
       // Calculate position of the context menu. We want to make sure it
       // doesn't get positioned off-screen.
